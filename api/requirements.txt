@@ -1,0 +1,8 @@
+fastapi
+pydantic
+aiogram==3.3.0
+uvicorn
+motor==3.1.1
+python-multipart
+pillow
+apscheduler
