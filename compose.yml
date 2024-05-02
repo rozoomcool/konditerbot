@@ -13,11 +13,15 @@ services:
 
   bot:
     build: ./bot
+    networks:
+      - mynetwork
     depends_on:
       - api
 
   mongo:
     image: mongo
+    networks:
+      - mynetwork
     ports:
       - "27018:27017"
   nginx:

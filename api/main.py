@@ -8,7 +8,7 @@ from motor import motor_asyncio
 from pydantic import BaseModel
 from bson import ObjectId
 
-MONGO_DETAILS = "mongodb://mongo:27018"
+MONGO_DETAILS = "mongodb://mongo:27017"
 
 client = motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
 database = client.bot

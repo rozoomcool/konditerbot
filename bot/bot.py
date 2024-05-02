@@ -62,7 +62,7 @@ async def command_start_handler(message: Message) -> None:
 async def main() -> None:
     scheduler = AsyncIOScheduler()
 
-    scheduler.add_job(send_orders, 'interval', seconds=10)
+    scheduler.add_job(send_orders, 'interval', minutes=1)
     scheduler.start()
 
     await dp.start_polling(bot)
