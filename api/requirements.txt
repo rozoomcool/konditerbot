@@ -6,3 +6,4 @@ motor==3.1.1
 python-multipart
 pillow
 apscheduler
+gunicorn
