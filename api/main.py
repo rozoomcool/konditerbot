@@ -17,7 +17,7 @@ order_collection = database.get_collection("order_collection")
 
 class Order(BaseModel):
     name: str
-    image: UploadFile
+    images: list[UploadFile]  # Changed to list of UploadFile for multiple images
     price: str
     prepayment: str
     compound: str
@@ -32,11 +32,18 @@ app = FastAPI()
 
 @app.post("/order")
 async def post_order(order: Order = Depends(Order)):
-    image_data = await order.image.read()
-    img = base64.b64encode(image_data)
+    if len(order.images) > 10:
+        raise HTTPException(status_code=400, detail="Maximum 10 images allowed")
+
+    images_data = []
+    for image in order.images:
+        image_data = await image.read()
+        img_base64 = base64.b64encode(image_data).decode('utf-8')
+        images_data.append(img_base64)
+
     created_at = datetime.now()
-    order_data = order.model_dump()
-    order_data["image"] = img
+    order_data = order.dict()
+    order_data["images"] = images_data
     order_data["created_at"] = created_at
     inserted_order = await order_collection.insert_one(order_data)
 

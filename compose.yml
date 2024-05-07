@@ -19,11 +19,11 @@ services:
       - api
 
   mongo:
-    image: mongo:4.4
+    image: mongo:latest
     networks:
       - mynetwork
     ports:
-      - "27018:27017"
+      - "27017:27017"
   nginx:
     build: ./nginx
     ports:
