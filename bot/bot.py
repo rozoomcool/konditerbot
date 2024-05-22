@@ -15,8 +15,8 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from db import user_collection, order_collection
 
-# TOKEN = "6406386917:AAGdBAi0_FvUkpkuoyk9CJfC97ywNGfcVko"
-TOKEN = "7105828267:AAGlYANgVAHiUbDg2Zq7t6e2-5_MiEGIYB8"
+TOKEN = "6840739601:AAEM6oMDbD7FqO9LsKdMZzn7tXhSeUQU3Ns"
+# TOKEN = "7105828267:AAGlYANgVAHiUbDg2Zq7t6e2-5_MiEGIYB8"
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot=bot)
