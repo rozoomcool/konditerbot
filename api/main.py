@@ -1,6 +1,7 @@
 import base64
 from datetime import datetime
 from io import BytesIO
+from typing import Optional, List
 
 from PIL import Image
 from fastapi import FastAPI, Depends, UploadFile, HTTPException
@@ -8,23 +9,32 @@ from motor import motor_asyncio
 from pydantic import BaseModel
 from bson import ObjectId
 
-MONGO_DETAILS = "mongodb://mongo:27017"
+MONGO_DETAILS = "mongodb://mongo:27017/bot"
 
 client = motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
 database = client.bot
 order_collection = database.get_collection("order_collection")
 
 
+class Item(BaseModel):
+    name: Optional[str]
+    count: Optional[int]
+    price: Optional[float]
+
+
 class Order(BaseModel):
-    name: str
-    images: list[UploadFile]  # Changed to list of UploadFile for multiple images
-    price: str
-    prepayment: str
-    compound: str
-    client: str
-    delivery: str
-    address: str
-    comment: str
+    to: str
+    deadline: str
+    name: Optional[str] = None
+    client: Optional[str] = None
+    communication: Optional[str] = None
+    images: Optional[list[UploadFile]] = []
+    prepayment: Optional[str] = None
+    delivery: Optional[str] = None
+    address: Optional[str] = None
+    comment: Optional[str] = None
+    items: Optional[List[Item]] = []
+    created_at: Optional[datetime] = datetime.now()
 
 
 app = FastAPI()
@@ -40,11 +50,8 @@ async def post_order(order: Order = Depends(Order)):
         image_data = await image.read()
         img_base64 = base64.b64encode(image_data).decode('utf-8')
         images_data.append(img_base64)
-
-    created_at = datetime.now()
     order_data = order.dict()
     order_data["images"] = images_data
-    order_data["created_at"] = created_at
     inserted_order = await order_collection.insert_one(order_data)
 
     return {"id": str(inserted_order.inserted_id)}

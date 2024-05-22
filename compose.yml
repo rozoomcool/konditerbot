@@ -3,45 +3,31 @@ version: "3.8"
 services:
   api:
     build: ./api
-    command: gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:3001
+    command: gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:3000
     ports:
-      - "3001:3001"
+      - "3000:3000"
     networks:
       - mynetwork
     depends_on:
       - mongo
-
   bot:
     build: ./bot
     networks:
       - mynetwork
     depends_on:
-      - api
-
+      - mongo
   mongo:
-    image: mongo:4.4
+    image: mongo:6-jammy
     networks:
       - mynetwork
     ports:
       - "27018:27017"
-#  nginx:
-#    build: ./nginx
-#    ports:
-#      - "3000:3000"
-#      - "443:443"
+#  certbot:
+#    image: certbot/certbot:latest
 #    volumes:
-#      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-#      - ./logs:/var/log/nginx
-#    networks:
-#      - mynetwork
-#    depends_on:
-#      - api
-  certbot:
-    image: certbot/certbot:latest
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/data:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+#      - ./certbot/conf:/etc/letsencrypt
+#      - ./certbot/data:/var/www/certbot
+#    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 networks:
   mynetwork:
