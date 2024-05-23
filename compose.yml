@@ -12,6 +12,7 @@ services:
       - mongo
   bot:
     build: ./bot
+    command: python bot.py
     networks:
       - mynetwork
     depends_on:
