@@ -27,8 +27,8 @@ user_collection = database.get_collection("users_collection")
 order_collection = database.get_collection("order_collection")
 
 
-# TOKEN = "6840739601:AAEM6oMDbD7FqO9LsKdMZzn7tXhSeUQU3Ns"
-TOKEN = "7105828267:AAGlYANgVAHiUbDg2Zq7t6e2-5_MiEGIYB8"
+TOKEN = "6840739601:AAEM6oMDbD7FqO9LsKdMZzn7tXhSeUQU3Ns"
+# TOKEN = "7105828267:AAGlYANgVAHiUbDg2Zq7t6e2-5_MiEGIYB8"
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot=bot)
