@@ -40,6 +40,7 @@ def order_to_text(order: Dict) -> str:
     order_text += f"Название: {order.get("name")}\n"
     order_text += f"Состав:\n"
     for item in json.loads(order.get("items")):
+        order_text += "\n"
         order_text += f"\t- Имя: {item.get("name")}"
         order_text += f"\t- Кол-во: {item.get("count")}"
         order_text += f"\t- Цена: {item.get("price")}"
@@ -76,8 +77,7 @@ async def send_orders():
                         print(f"chat_id:{chat_id}")
                         if len(media_group) > 0:
                             await bot.send_media_group(chat_id, media=media_group)
-                        else:
-                            await bot.send_message(chat_id, order_text[:4000])
+                        await bot.send_message(chat_id, order_text[:4000])
                     except TelegramAPIError as e:
                         print(f"Failed to send message to chat_id {chat_id}: {e}")
             await order_collection.delete_one({"_id": order["_id"]})
