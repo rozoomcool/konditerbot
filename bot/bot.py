@@ -1,5 +1,6 @@
 import asyncio
 import base64
+import json
 import logging
 import sys
 from datetime import datetime
@@ -26,8 +27,8 @@ user_collection = database.get_collection("users_collection")
 order_collection = database.get_collection("order_collection")
 
 
-TOKEN = "6840739601:AAEM6oMDbD7FqO9LsKdMZzn7tXhSeUQU3Ns"
-# TOKEN = "7105828267:AAGlYANgVAHiUbDg2Zq7t6e2-5_MiEGIYB8"
+# TOKEN = "6840739601:AAEM6oMDbD7FqO9LsKdMZzn7tXhSeUQU3Ns"
+TOKEN = "7105828267:AAGlYANgVAHiUbDg2Zq7t6e2-5_MiEGIYB8"
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot=bot)
@@ -38,7 +39,7 @@ def order_to_text(order: Dict) -> str:
     order_text = f"Новый заказ: \n"
     order_text += f"Название: {order.get("name")}\n"
     order_text += f"Состав:\n"
-    for item in order.get("items"):
+    for item in json.loads(order.get("items")):
         order_text += f"\t- Имя: {item.get("name")}"
         order_text += f"\t- Кол-во: {item.get("count")}"
         order_text += f"\t- Цена: {item.get("price")}"
@@ -75,7 +76,8 @@ async def send_orders():
                         print(f"chat_id:{chat_id}")
                         if len(media_group) > 0:
                             await bot.send_media_group(chat_id, media=media_group)
-                        await bot.send_message(chat_id, order_text[:4000])
+                        else:
+                            await bot.send_message(chat_id, order_text[:4000])
                     except TelegramAPIError as e:
                         print(f"Failed to send message to chat_id {chat_id}: {e}")
             await order_collection.delete_one({"_id": order["_id"]})
