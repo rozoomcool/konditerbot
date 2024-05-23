@@ -3,9 +3,9 @@ version: "3.8"
 services:
   api:
     build: ./api
-    command: gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:3000
+    command: gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:3001
     ports:
-      - "3000:3000"
+      - "3001:3001"
     networks:
       - mynetwork
     depends_on:
@@ -23,6 +23,10 @@ services:
       - mynetwork
     ports:
       - "27018:27017"
+  nginx:
+    build: ./nginx
+    ports:
+      - "3000:3000"
 #  certbot:
 #    image: certbot/certbot:latest
 #    volumes:
