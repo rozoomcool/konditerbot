@@ -84,7 +84,8 @@ async def send_orders():
                             print(f"chat_id:{chat_id}")
                             if len(media_group) > 0:
                                 await bot.send_media_group(chat_id, media=media_group)
-                            await bot.send_message(chat_id, order_text[:4000])
+                            else:
+                                await bot.send_message(chat_id, order_text[:4000])
                         except TelegramAPIError as e:
                             print(f"Failed to send message to chat_id {chat_id}: {e}")
             except Exception as e:
