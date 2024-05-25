@@ -42,8 +42,6 @@ app = FastAPI(
     max_request_size=1024 * 1024 * 1024
 )
 
-app.add_middleware(LimitUploadSize, max_upload_size=100_000_000)
-
 
 class Item(BaseModel):
     name: Optional[str]
@@ -68,7 +66,7 @@ class Order(BaseModel):
 @app.post("/order")
 async def post_order(
     order: Order = Depends(Order),
-    images: List[UploadFile] = File(None)
+    images: List[UploadFile] = File(max_length=1024*1024*1024)
 ):
     # images = []
     if images and len(images) > 10:
