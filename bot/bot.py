@@ -66,9 +66,10 @@ async def send_orders():
             order_text = order_to_text(order)
 
             images_base64 = order.get("images", [])
-            print(f"images: {images_base64}")
+            print(f"images: {images_base64[:20]}")
             media_group = []
             for image_base64 in images_base64:
+                print(":::::")
                 image_bytes = base64.b64decode(image_base64)
                 media_group.append(
                     InputMediaPhoto(media=BufferedInputFile(file=image_bytes, filename="f"), caption=order_text[:1000]))
