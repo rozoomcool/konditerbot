@@ -7,4 +7,3 @@ python-multipart
 pillow
 python-multipart
 apscheduler
-starlette-validation-uploadfile
