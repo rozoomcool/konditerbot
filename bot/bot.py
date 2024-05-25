@@ -62,7 +62,12 @@ async def send_orders():
         print(f":::::start")
         for order in orders:
             print(":::::orders")
-            order_text = order_to_text(order)
+            try:
+                order_text = order_to_text(order)
+            except Exception as e:
+                print(f"Error in order_to_text: {e}")
+                await order_collection.delete_one({"_id": order["_id"]})
+                return
 
             images_base64 = order.get("images", [])
             media_group = []
