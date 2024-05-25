@@ -92,8 +92,8 @@ async def command_start_handler(message: Message, command: CommandObject) -> Non
     user = await user_collection.find_one({"chat_id": message.from_user.id})
     if user is None:
         entity = await user_collection.insert_one({"cms_id": args, "chat_id": message.from_user.id})
-        await message.answer(f"Привет, ваш id: {entity.get("chat_id")}")
-    await message.answer(f"Привет, ваш id: {user.get("chat_id")}")
+        await message.answer(f"Привет, ваш id: {entity.get("cms_id")}")
+    await message.answer(f"Привет, ваш id: {user.get("cms_id")}")
 
 
 async def main() -> None:
