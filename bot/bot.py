@@ -44,7 +44,7 @@ def order_to_text(order: Dict) -> str:
             order_text += f"\t- Цена: {item.get("price")}"
     except Exception as e:
         order_text += f"\nСостав: {order.get("items")}"
-    order_text += f"Предоплата: {order.get("prepayment")}\n"
+    order_text += f"\nПредоплата: {order.get("prepayment")}\n"
     order_text += f"Клиент: {order.get("client")}\n" 
     order_text += f"Доставка: {order.get("delivery")}\n"
     order_text += f"Адрес: {order.get("address")}\n"
