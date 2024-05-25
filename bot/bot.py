@@ -63,7 +63,7 @@ async def send_orders():
     try:
         # orders = await order_collection.find({}).to_list(None)
         print(":::::start")
-        async for order in await order_collection.find():
+        async for order in await order_collection.find().to_list(None):
             order_text = order_to_text(order)
             print(":::::orders")
 
