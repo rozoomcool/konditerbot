@@ -62,16 +62,16 @@ def order_to_text(order: Dict) -> str:
 async def send_orders():
     try:
         # orders = await order_collection.find({}).to_list(None)
-        # print(":::::")
+        print(":::::start")
         async for order in order_collection.find({}):
             order_text = order_to_text(order)
-            print(":::::")
+            print(":::::orders")
 
             images_base64 = order.get("images", [])
             media_group = []
-            print(":::::")
+            print(":::::media")
             for image_base64 in images_base64:
-                print(":::::")
+                print(":::::images")
                 image_bytes = base64.b64decode(image_base64)
                 media_group.append(
                     InputMediaPhoto(media=BufferedInputFile(file=image_bytes, filename="f"), caption=order_text[:1000]))
@@ -112,5 +112,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     asyncio.run(main())
