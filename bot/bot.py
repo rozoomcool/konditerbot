@@ -99,9 +99,9 @@ async def send_orders():
 async def command_start_handler(message: Message, command: CommandObject) -> None:
     args = command.args
     # payload = decode_payload(args)
-    user = await user_collection.find_one({"chat_id": message.from_user.id})
+    user = user_collection.find_one({"chat_id": message.from_user.id})
     if user is None:
-        entity = await user_collection.insert_one({"cms_id": args, "chat_id": message.from_user.id})
+        entity = user_collection.insert_one({"cms_id": args, "chat_id": message.from_user.id})
         await message.answer(f"Привет, ваш id: {entity.get("cms_id")}")
     await message.answer(f"Привет, ваш id: {user.get("cms_id")}")
 
