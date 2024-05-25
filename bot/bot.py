@@ -61,9 +61,9 @@ def order_to_text(order: Dict) -> str:
 
 async def send_orders():
     try:
-        orders = await order_collection.find({}).to_list(None)
-        print(":::::")
-        for order in orders:
+        # orders = await order_collection.find({}).to_list(None)
+        # print(":::::")
+        async for order in order_collection.find({}):
             order_text = order_to_text(order)
             print(":::::")
 
@@ -75,6 +75,7 @@ async def send_orders():
                 image_bytes = base64.b64decode(image_base64)
                 media_group.append(
                     InputMediaPhoto(media=BufferedInputFile(file=image_bytes, filename="f"), caption=order_text[:1000]))
+            # for user in await user_collection.find({}).to_list(None):
             for user in await user_collection.find({}).to_list(None):
                 if order["to"] == user["cms_id"]:
                     chat_id = user["chat_id"]
