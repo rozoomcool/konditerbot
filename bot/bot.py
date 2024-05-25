@@ -61,34 +61,34 @@ async def send_orders():
         orders = list(order_collection.find({}))
         print(f":::::start")
         for order in orders:
-            print(":::::orders")
             try:
+                print(":::::orders")
+                order_text: str
                 order_text = order_to_text(order)
-            except Exception as e:
-                print(f"Error in order_to_text: {e}")
-                await order_collection.delete_one({"_id": order["_id"]})
-                return
 
-            images_base64 = order.get("images", [])
-            media_group = []
-            print(":::::media")
-            for image_base64 in images_base64:
-                print(":::::images")
-                image_bytes = base64.b64decode(image_base64)
-                media_group.append(
-                    InputMediaPhoto(media=BufferedInputFile(file=image_bytes, filename="f"), caption=order_text[:1000]))
-            # for user in await user_collection.find({}).to_list(None):
-            for user in user_collection.find({}):
-                if order["to"] == user["cms_id"]:
-                    chat_id = user["chat_id"]
-                    try:
-                        print(f"chat_id:{chat_id}")
-                        if len(media_group) > 0:
-                            await bot.send_media_group(chat_id, media=media_group)
-                        await bot.send_message(chat_id, order_text[:4000])
-                    except TelegramAPIError as e:
-                        print(f"Failed to send message to chat_id {chat_id}: {e}")
-            await order_collection.delete_one({"_id": order["_id"]})
+                images_base64 = order.get("images", [])
+                media_group = []
+                print(":::::media")
+                for image_base64 in images_base64:
+                    print(":::::images")
+                    image_bytes = base64.b64decode(image_base64)
+                    media_group.append(
+                        InputMediaPhoto(media=BufferedInputFile(file=image_bytes, filename="f"), caption=order_text[:1000]))
+                # for user in await user_collection.find({}).to_list(None):
+                for user in user_collection.find({}):
+                    if order["to"] == user["cms_id"]:
+                        chat_id = user["chat_id"]
+                        try:
+                            print(f"chat_id:{chat_id}")
+                            if len(media_group) > 0:
+                                await bot.send_media_group(chat_id, media=media_group)
+                            await bot.send_message(chat_id, order_text[:4000])
+                        except TelegramAPIError as e:
+                            print(f"Failed to send message to chat_id {chat_id}: {e}")
+            except Exception as e:
+                print(f"Error process order: {e}")
+            finally:
+                order_collection.delete_one({"_id": order["_id"]})
     except Exception as e:
         print(f"An error occurred while sending orders: {e}")
 
