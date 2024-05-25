@@ -12,6 +12,3 @@ RUN pip install -r requirements.txt
 
 # Копируем все файлы проекта в контейнер
 COPY . .
-
-# Запускаем бота
-CMD ["python", "bot.py"]

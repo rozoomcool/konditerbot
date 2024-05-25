@@ -37,7 +37,10 @@ class Order(BaseModel):
     created_at: Optional[datetime] = datetime.now()
 
 
-app = FastAPI()
+app = FastAPI(
+    upload_max_size="100MB",
+    max_request_size=1024 * 1024 * 1024
+)
 
 
 @app.post("/order")

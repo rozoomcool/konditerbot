@@ -3,15 +3,16 @@ version: "3.8"
 services:
   api:
     build: ./api
-    command: gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:3000
+    command: gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker  --limit-request-line 0 --limit-request-fields 32768 --bind 0.0.0.0:3001
     ports:
-      - "3000:3000"
+      - "3001:3001"
     networks:
       - mynetwork
     depends_on:
       - mongo
   bot:
     build: ./bot
+    command: python bot.py
     networks:
       - mynetwork
     depends_on:
