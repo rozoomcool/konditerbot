@@ -1,5 +1,6 @@
 import asyncio
 import base64
+import json
 import logging
 import sys
 from datetime import datetime
@@ -12,8 +13,19 @@ from aiogram.filters import CommandStart, CommandObject
 from aiogram.types import Message, InputFile, BufferedInputFile, InputMediaPhoto
 from aiogram.utils.payload import decode_payload
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from motor import motor_asyncio
 
-from db import user_collection, order_collection
+
+MONGO_DETAILS = "mongodb://mongo:27017/bot"
+# MONGO_DETAILS = "mongodb://localhost:27017"
+
+client = motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
+
+database = client.bot
+
+user_collection = database.get_collection("users_collection")
+order_collection = database.get_collection("order_collection")
+
 
 TOKEN = "6840739601:AAEM6oMDbD7FqO9LsKdMZzn7tXhSeUQU3Ns"
 # TOKEN = "7105828267:AAGlYANgVAHiUbDg2Zq7t6e2-5_MiEGIYB8"
@@ -27,7 +39,8 @@ def order_to_text(order: Dict) -> str:
     order_text = f"Новый заказ: \n"
     order_text += f"Название: {order.get("name")}\n"
     order_text += f"Состав:\n"
-    for item in order.get("items"):
+    for item in json.loads(order.get("items")):
+        order_text += "\n"
         order_text += f"\t- Имя: {item.get("name")}"
         order_text += f"\t- Кол-во: {item.get("count")}"
         order_text += f"\t- Цена: {item.get("price")}"

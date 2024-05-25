@@ -23,6 +23,10 @@ services:
       - mynetwork
     ports:
       - "27018:27017"
+  nginx:
+    build: ./nginx
+    ports:
+      - "3000:3000"
 #  certbot:
 #    image: certbot/certbot:latest
 #    volumes:
