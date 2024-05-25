@@ -36,6 +36,7 @@ def order_to_text(order: Dict) -> str:
     order_text = f"Новый заказ: \n"
     order_text += f"Название: {order.get("name")}\n"
     order_text += f"Состав:\n"
+    print(f":::{order.get('items')}")
     for item in json.loads(order.get("items")):
         order_text += "\n"
         order_text += f"\t- Имя: {item.get("name")}"
@@ -72,7 +73,7 @@ async def send_orders():
                 media_group.append(
                     InputMediaPhoto(media=BufferedInputFile(file=image_bytes, filename="f"), caption=order_text[:1000]))
             # for user in await user_collection.find({}).to_list(None):
-            for user in await user_collection.find({}).to_list(None):
+            for user in user_collection.find({}):
                 if order["to"] == user["cms_id"]:
                     chat_id = user["chat_id"]
                     try:
