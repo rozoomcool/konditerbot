@@ -36,12 +36,14 @@ def order_to_text(order: Dict) -> str:
     order_text = f"Новый заказ: \n"
     order_text += f"Название: {order.get("name")}\n"
     order_text += f"Состав:\n"
-    print(f":::{order.get('items')}")
-    for item in json.loads(order.get("items")):
-        order_text += "\n"
-        order_text += f"\t- Имя: {item.get("name")}"
-        order_text += f"\t- Кол-во: {item.get("count")}"
-        order_text += f"\t- Цена: {item.get("price")}"
+    try:
+        for item in json.loads(order.get("items")):
+            order_text += "\n"
+            order_text += f"\t- Имя: {item.get("name")}"
+            order_text += f"\t- Кол-во: {item.get("count")}"
+            order_text += f"\t- Цена: {item.get("price")}"
+    except Exception as e:
+        order_text += f"\nСостав: {order.get("items")}"
     order_text += f"Предоплата: {order.get("prepayment")}\n"
     order_text += f"Клиент: {order.get("client")}\n" 
     order_text += f"Доставка: {order.get("delivery")}\n"
