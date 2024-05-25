@@ -61,7 +61,7 @@ def order_to_text(order: Dict) -> str:
 
 async def send_orders():
     try:
-        orders = order_collection.find({})
+        orders = order_collection.find({}).to_list(None)
         print(f"orders: {orders}")
         for order in orders:
             order_text = order_to_text(order)
