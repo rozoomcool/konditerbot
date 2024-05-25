@@ -74,8 +74,10 @@ async def send_orders():
                 for image_base64 in images_base64:
                     print(":::::images")
                     image_bytes = base64.b64decode(image_base64)
+                    # media_group.append(
+                    #     InputMediaPhoto(media=BufferedInputFile(file=image_bytes, filename="f"), caption=order_text[:1000]))
                     media_group.append(
-                        InputMediaPhoto(media=BufferedInputFile(file=image_bytes, filename="f"), caption=order_text[:1000]))
+                        InputMediaPhoto(media=BufferedInputFile(file=image_bytes, filename="f"),))
                 # for user in await user_collection.find({}).to_list(None):
                 for user in user_collection.find({}):
                     if order["to"] == user["cms_id"]:
@@ -84,8 +86,7 @@ async def send_orders():
                             print(f"chat_id:{chat_id}")
                             if len(media_group) > 0:
                                 await bot.send_media_group(chat_id, media=media_group)
-                            else:
-                                await bot.send_message(chat_id, order_text[:4000])
+                            await bot.send_message(chat_id, order_text[:4000])
                         except TelegramAPIError as e:
                             print(f"Failed to send message to chat_id {chat_id}: {e}")
             except Exception as e:
