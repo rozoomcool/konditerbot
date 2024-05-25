@@ -3,29 +3,25 @@ import base64
 import json
 import logging
 import sys
-from datetime import datetime
-from io import BytesIO
 from typing import Dict
 
+import pymongo
 from aiogram import Dispatcher, Bot, types
 from aiogram.exceptions import TelegramAPIError
 from aiogram.filters import CommandStart, CommandObject
 from aiogram.types import Message, InputFile, BufferedInputFile, InputMediaPhoto
 from aiogram.utils.payload import decode_payload
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from motor import motor_asyncio
-from motor.core import AgnosticCollection
-from motor.motor_asyncio import AsyncIOMotorCollection
 
 MONGO_DETAILS = "mongodb://mongo:27017/bot"
 # MONGO_DETAILS = "mongodb://localhost:27017"
 
-client = motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
+client = pymongo.MongoClient(MONGO_DETAILS)
 
 database = client.bot
 
-user_collection: AgnosticCollection = database.get_collection("users_collection")
-order_collection: AgnosticCollection = database.get_collection("order_collection")
+user_collection = database.get_collection("users_collection")
+order_collection = database.get_collection("order_collection")
 
 
 TOKEN = "6840739601:AAEM6oMDbD7FqO9LsKdMZzn7tXhSeUQU3Ns"
@@ -61,9 +57,8 @@ def order_to_text(order: Dict) -> str:
 
 async def send_orders():
     try:
-        # orders = await order_collection.find({}).to_list(None)
         print(":::::start")
-        for order in await (order_collection.find().to_list(None)):
+        for order in order_collection.find({}):
             order_text = order_to_text(order)
             print(":::::orders")
 

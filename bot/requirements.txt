@@ -2,7 +2,7 @@ fastapi
 pydantic
 aiogram==3.3.0
 uvicorn
-motor==3.1.1
+pymongo
 python-multipart
 pillow
 apscheduler
