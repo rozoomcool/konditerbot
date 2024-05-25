@@ -61,10 +61,12 @@ def order_to_text(order: Dict) -> str:
 async def send_orders():
     try:
         orders = await order_collection.find({}).to_list(None)
+        print(f"orders: {orders}")
         for order in orders:
             order_text = order_to_text(order)
 
             images_base64 = order.get("images", [])
+            print(f"images: {images_base64}")
             media_group = []
             for image_base64 in images_base64:
                 image_bytes = base64.b64decode(image_base64)
