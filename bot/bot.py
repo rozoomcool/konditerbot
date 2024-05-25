@@ -32,7 +32,7 @@ def order_to_text(order: Dict) -> str:
         order_text += f"\t- Кол-во: {item.get("count")}"
         order_text += f"\t- Цена: {item.get("price")}"
     order_text += f"Предоплата: {order.get("prepayment")}\n"
-    order_text += f"Клиент: {order.get("client")}\n"
+    order_text += f"Клиент: {order.get("client")}\n" 
     order_text += f"Доставка: {order.get("delivery")}\n"
     order_text += f"Адрес: {order.get("address")}\n"
     order_text += f"Комментарий: {order.get("comment")}\n"
@@ -78,8 +78,9 @@ async def command_start_handler(message: Message, command: CommandObject) -> Non
     # payload = decode_payload(args)
     user = await user_collection.find_one({"chat_id": message.from_user.id})
     if user is None:
-        await user_collection.insert_one({"cms_id": args, "chat_id": message.from_user.id})
-    await message.answer("Hello!")
+        entity = await user_collection.insert_one({"cms_id": args, "chat_id": message.from_user.id})
+        await message.answer(f"Привет, ваш id: {entity.get("chat_id")}")
+    await message.answer(f"Привет, ваш id: {user.get("chat_id")}")
 
 
 async def main() -> None:
