@@ -46,7 +46,7 @@ async def post_order(
     images: List[UploadFile] = File(default=None)
 ):
     # images = []
-    if len(images) > 10:
+    if images and len(images) > 10:
         raise HTTPException(status_code=400, detail="Maximum 10 images allowed")
 
     images_data = []
