@@ -43,7 +43,7 @@ class Order(BaseModel):
 @app.post("/order")
 async def post_order(
     order: Order = Depends(Order),
-    images: List[UploadFile] = File(default=None)
+    images: List[UploadFile] = File(default=[])
 ):
     # images = []
     if images and len(images) > 10:
