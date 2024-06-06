@@ -2,7 +2,7 @@ import base64
 import json
 from datetime import datetime
 from io import BytesIO
-from typing import Optional, List
+from typing import Optional, List, Union
 
 from PIL import Image
 from fastapi import FastAPI, Depends, UploadFile, HTTPException, File, Body, Form
@@ -43,7 +43,7 @@ class Order(BaseModel):
 @app.post("/order")
 async def post_order(
     order: Order = Depends(Order),
-    images: List[Optional[UploadFile]] = File(default=None)
+    images: Union[List[UploadFile], None] = File(default=None)
 ):
     # images = []
     if images and len(images) > 10:
