@@ -51,6 +51,8 @@ def order_to_text(order: Dict) -> str:
     order_text += f"Комментарий: {order.get("comment")}\n"
     order_text += f"Связь: {order.get("communication")}\n"
     order_text += f"Создан: {order.get("created_at")}\n"
+    order_text += f"Срок до: {order.get("deadline")}\n"
+
     return order_text
 
 
