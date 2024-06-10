@@ -3,7 +3,8 @@ version: "3.8"
 services:
   api:
     build: ./api
-    command: gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --limit-request-line 0 --limit-request-fields 32768 --limit-request-body 104857600 --bind 0.0.0.0:3001
+    command: gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --limit-request-line 0 --limit-request-fields 32768 --limit-request-body 104857600 --bind 0.0.0.0:3001 --log-level debug
+#    command: gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --limit-request-line 0 --limit-request-fields 32768 --limit-request-body 104857600 --bind 0.0.0.0:3001
     ports:
       - "3001:3001"
     networks:
