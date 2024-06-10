@@ -1,5 +1,6 @@
 import base64
 import json
+import logging
 from datetime import datetime
 from io import BytesIO
 from typing import Optional, List
@@ -8,12 +9,15 @@ from PIL import Image
 from fastapi import FastAPI, Depends, UploadFile, HTTPException, File, Body, Form
 from motor import motor_asyncio
 from pydantic import BaseModel
+from starlette.middleware.cors import CORSMiddleware
+from starlette.requests import Request
 
 MONGO_DETAILS = "mongodb://mongo:27017/bot"
 
 client = motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
 database = client.bot
 order_collection = database.get_collection("order_collection")
+
 app = FastAPI(
     upload_max_size="100MB",
     max_request_size=1024 * 1024 * 1024
@@ -38,6 +42,18 @@ class Order(BaseModel):
     comment: Optional[str] = None
     items: Optional[str] = None
     created_at: Optional[datetime] = datetime.now()
+
+
+logging.basicConfig(level=logging.DEBUG)
+
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    logger = logging.getLogger("uvicorn")
+    logger.info(f"Request: {request.method} {request.url}")
+    response = await call_next(request)
+    logger.info(f"Response status: {response.status_code}")
+    return response
 
 
 @app.post("/order")
