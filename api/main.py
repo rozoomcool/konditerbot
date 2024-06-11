@@ -50,9 +50,23 @@ logging.basicConfig(level=logging.DEBUG)
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     logger = logging.getLogger("uvicorn")
+
+    # Логирование метода запроса и URL
     logger.info(f"Request: {request.method} {request.url}")
+
+    # Логирование заголовков
+    headers = dict(request.headers)
+    logger.info(f"Headers: {json.dumps(headers, indent=2)}")
+
+    # Логирование тела запроса
+    body = await request.body()
+    logger.info(f"Body: {body.decode('utf-8')}")
+
     response = await call_next(request)
+
+    # Логирование статуса ответа
     logger.info(f"Response status: {response.status_code}")
+
     return response
 
 
