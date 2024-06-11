@@ -72,7 +72,7 @@ async def log_requests(request: Request, call_next):
 
 @app.post("/order")
 async def post_order(
-    order: Order = Depends(Order),
+    order: Order = Order,
     images: List[UploadFile] = File(default=None)
 ):
     # images = []
