@@ -72,9 +72,34 @@ async def log_requests(request: Request, call_next):
 
 @app.post("/order")
 async def post_order(
-    order: Order = Order,
-    images: List[UploadFile] = File(default=None)
+    to: str = Form(),
+    deadline: datetime = Form(default=datetime.now()),
+    name: Optional[str] = Form(default=None),
+    client: Optional[str] = Form(default=None),
+    communication: Optional[str] = Form(default=None),
+    prepayment: Optional[str] = Form(default=None),
+    delivery: Optional[str] = Form(default=None),
+    address: Optional[str] = Form(default=None),
+    comment: Optional[str] = Form(default=None),
+    items: Optional[str] = Form(default=None),
+    created_at: Optional[datetime] = Form(default=datetime.now()),
+    images: List[UploadFile] = File(default=None),
 ):
+
+    order = Order(
+        to=to,
+        deadline=deadline,
+        name=name,
+        client=client,
+        communication=communication,
+        prepayment=prepayment,
+        delivery=delivery,
+        address=address,
+        comment=comment,
+        items=items,
+        created_at=created_at,
+    )
+
     # images = []
     if images and len(images) > 10:
         raise HTTPException(status_code=400, detail="Maximum 10 images allowed")
