@@ -111,7 +111,7 @@ async def post_order(
             img_base64 = base64.b64encode(image_data).decode('utf-8')
             images_data.append(img_base64)
 
-    order_data = order.dict()
+    order_data = order.model_dump()
     order_data["images"] = images_data
 
     inserted_order = await order_collection.insert_one(order_data)
