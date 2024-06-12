@@ -39,7 +39,7 @@ def order_to_text(order: Dict) -> str:
     except Exception as e:
         order_text += f"Сумма заказа: _"
     try:
-        logging.info(json.loads(order.get("items")))
+        logging.info(json.loads(order.get("items") if order.get("items") is not None else "[]"))
         order_text += f"\nСостав заказа:\n\n"
         for item in json.loads(order.get("items")):
             order_text += "\n"
