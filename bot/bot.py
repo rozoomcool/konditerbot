@@ -43,11 +43,11 @@ def order_to_text(order: Dict) -> str:
         logging.info(f"ITEMS::: {items}")
         order_text += f"\n\nСостав заказа:\n"
         for item in items:
-            # order_text += "\n"
             order_text += f"\nИмя: {item.get("name")}"
             order_text += f"\nНачинка: {item.get("filling") if item.get("filling") is not None else '_'}"
             order_text += f"\nКол-во: {item.get("count")}"
             order_text += f"\nЦена: {item.get("price")}"
+            order_text += "\n"
     except Exception as e:
         # order_text += f"\nСостав: {order.get("items")}"
         logging.error(f"{e}")
