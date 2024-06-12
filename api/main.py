@@ -100,6 +100,8 @@ async def post_order(
         created_at=created_at,
     )
 
+    logging.info(f"::: {items}")
+
     # images = []
     if images and len(images) > 10:
         raise HTTPException(status_code=400, detail="Maximum 10 images allowed")
