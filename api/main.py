@@ -81,7 +81,7 @@ async def post_order(
     delivery: Optional[str] = Form(default=None),
     address: Optional[str] = Form(default=None),
     comment: Optional[str] = Form(default=None),
-    items: Optional[str] = Form(default=None),
+    items: Optional[str] = Form(...),
     created_at: Optional[datetime] = Form(default=datetime.now()),
     images: List[UploadFile] = File(default=None),
 ):
