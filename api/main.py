@@ -101,6 +101,7 @@ async def post_order(
     )
 
     logging.info(f"::: {items}")
+    logging.info(f"::: {order}")
 
     # images = []
     if images and len(images) > 10:
