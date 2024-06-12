@@ -23,7 +23,6 @@ database = client.bot
 user_collection = database.get_collection("users_collection")
 order_collection = database.get_collection("order_collection")
 
-
 TOKEN = "6840739601:AAEM6oMDbD7FqO9LsKdMZzn7tXhSeUQU3Ns"
 # TOKEN = "7105828267:AAGlYANgVAHiUbDg2Zq7t6e2-5_MiEGIYB8"
 
@@ -33,25 +32,30 @@ dp = Dispatcher(bot=bot)
 
 def order_to_text(order: Dict) -> str:
     # try:
-    order_text = f"Новый заказ: \n"
+    order_text = f"Новый заказ✅\n\n"
     order_text += f"Название: {order.get("name")}\n"
-    order_text += f"Состав:\n"
     try:
+        order_text += f"Сумма заказа: {sum(item.price for item in order.get("items") if order.get("items") is not None)}\n"
+    except Exception as e:
+        order_text += f"Сумма заказа: _"
+    try:
+        order_text += f"Состав заказа:\n"
         for item in json.loads(order.get("items")):
             order_text += "\n"
             order_text += f"\t- Имя: {item.get("name")}"
+            order_text += f"\t- Начинка: {item.get("filling") if item.get("filling") is not None else '_'}"
             order_text += f"\t- Кол-во: {item.get("count")}"
             order_text += f"\t- Цена: {item.get("price")}"
     except Exception as e:
         order_text += f"\nСостав: {order.get("items")}"
     order_text += f"\nПредоплата: {order.get("prepayment")}\n"
-    order_text += f"Клиент: {order.get("client")}\n" 
+    order_text += f"Клиент: {order.get("client")}\n"
     order_text += f"Доставка: {order.get("delivery")}\n"
     order_text += f"Адрес: {order.get("address")}\n"
     order_text += f"Комментарий: {order.get("comment")}\n"
-    order_text += f"Связь: {order.get("communication")}\n"
-    order_text += f"Создан: {order.get("created_at")}\n"
-    order_text += f"Срок до: {order.get("deadline")}\n"
+    order_text += f"\nТелефон: {order.get("communication")}\n"
+    order_text += f"\nСоздан: {order.get("created_at").strftime("%Y-%m-%d %H") if order.get("created_at") is not None else '_'}\n"
+    order_text += f"Срок до: {order.get("deadline").strftime("%Y-%m-%d %H") if order.get("deadline") is not None else '_'}\n"
 
     return order_text
 
@@ -79,7 +83,7 @@ async def send_orders():
                     # media_group.append(
                     #     InputMediaPhoto(media=BufferedInputFile(file=image_bytes, filename="f"), caption=order_text[:1000]))
                     media_group.append(
-                        InputMediaPhoto(media=BufferedInputFile(file=image_bytes, filename="f"),))
+                        InputMediaPhoto(media=BufferedInputFile(file=image_bytes, filename="f"), ))
                 # for user in await user_collection.find({}).to_list(None):
                 for user in user_collection.find({}):
                     if order["to"] == user["cms_id"]:
@@ -99,6 +103,15 @@ async def send_orders():
         print(f"An error occurred while sending orders: {e}")
 
 
+text = """
+Привет! Я — бот My Cake.
+
+Я буду сюда дублировать заказы из приложения, чтобы список заказов всегда был в доступе.
+
+Как только ты внесешь первый заказ в приложение – я сразу же пришлю его сюда👍🏻
+"""
+
+
 @dp.message(CommandStart(deep_link=True))
 async def command_start_handler(message: Message, command: CommandObject) -> None:
     args = command.args
@@ -106,8 +119,8 @@ async def command_start_handler(message: Message, command: CommandObject) -> Non
     user = user_collection.find_one({"chat_id": message.from_user.id})
     if user is None:
         entity = user_collection.insert_one({"cms_id": args, "chat_id": message.from_user.id})
-        await message.answer(f"Привет, ваш id: {entity.get("cms_id")}")
-    await message.answer(f"Привет, ваш id: {user.get("cms_id")}")
+        await message.answer(f"{text}\nВаш id: {entity.get("cms_id")}")
+    await message.answer(f"{text}\nВаш id: {user.get("cms_id")}")
 
 
 async def main() -> None:
