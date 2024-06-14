@@ -34,10 +34,7 @@ def order_to_text(order: Dict) -> str:
     # try:
     order_text = f"Новый заказ✅\n\n"
     order_text += f"Название: {order.get("name")}\n"
-    try:
-        order_text += f"Сумма заказа: {sum(float(item.price) for item in json.loads(order.get("items")))}\n"
-    except Exception as e:
-        order_text += f"Сумма заказа: _"
+    order_text += f"Сумма заказа: {order.get("summ")}\n"
     try:
         items = json.loads(order.get("items") if order.get("items") is not None else "[]")
         logging.info(f"ITEMS::: {items}")

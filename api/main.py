@@ -35,6 +35,7 @@ class Order(BaseModel):
     deadline: datetime = datetime.now()
     name: Optional[str] = None
     client: Optional[str] = None
+    summ: Optional[str] = None
     communication: Optional[str] = None
     prepayment: Optional[str] = None
     delivery: Optional[str] = None
@@ -76,6 +77,7 @@ async def post_order(
     deadline: datetime = Form(default=datetime.now()),
     name: Optional[str] = Form(default=None),
     client: Optional[str] = Form(default=None),
+    summ: Optional[str] = Form(default=None),
     communication: Optional[str] = Form(default=None),
     prepayment: Optional[str] = Form(default=None),
     delivery: Optional[str] = Form(default=None),
@@ -98,6 +100,7 @@ async def post_order(
         comment=comment,
         items=items,
         created_at=created_at,
+        summ=summ
     )
 
     logging.info(f"::: {items}")
