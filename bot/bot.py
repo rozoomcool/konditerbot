@@ -38,7 +38,7 @@ def order_to_text(order: Dict) -> str:
     try:
         items = json.loads(order.get("items") if order.get("items") is not None else "[]")
         logging.info(f"ITEMS::: {items}")
-        order_text += f"\n\nСостав заказа:\n"
+        order_text += f"\nСостав заказа:\n"
         for item in items:
             order_text += f"\nИмя: {item.get("name")}"
             order_text += f"\nНачинка: {item.get("filling") if item.get("filling") is not None else '_'}"
