@@ -14,8 +14,8 @@ from starlette.requests import Request
 
 MONGO_DETAILS = "mongodb://mongo:27017/bot"
 
-client = motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
-database = client.bot
+mongo_client = motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
+database = mongo_client.bot
 order_collection = database.get_collection("order_collection")
 
 app = FastAPI(
