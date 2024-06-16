@@ -55,8 +55,8 @@ def order_to_text(order: Dict) -> str:
     order_text += f"Адрес: {order.get("address")}\n"
     order_text += f"Комментарий: {order.get("comment")}\n"
     order_text += f"\n{order.get("communication")}\n"
-    order_text += f"\nСоздан: {order.get("created_at").strftime("%Y-%m-%d %H %M") if order.get("created_at") is not None else '_'}\n"
-    order_text += f"Срок до: {order.get("deadline").strftime("%Y-%m-%d %H %M") if order.get("deadline") is not None else '_'}\n"
+    order_text += f"\nСоздан: {order.get("created_at").strftime("%Y-%m-%d %H:%M") if order.get("created_at") is not None else '_'}\n"
+    order_text += f"Срок до: {order.get("deadline").strftime("%Y-%m-%d %H:%M") if order.get("deadline") is not None else '_'}\n"
 
     return order_text
 
