@@ -122,14 +122,17 @@ async def command_start_handler(message: Message, command: CommandObject) -> Non
     # payload = decode_payload(args)
     user = user_collection.find_one({"chat_id": message.from_user.id})
     if user is None and args:
-        if user_collection.find_one({"cms_id": args}):
-            await message.answer("Пользователь с таким id удже существует")
-            return
+        # if user_collection.find_one({"chat_id": message.from_user.id}):
+        #     await message.answer(f"Вы уже зарегистрированы\nВаш Id: ")
+        #     return
         entity = user_collection.insert_one({"cms_id": args, "chat_id": message.from_user.id})
         user = user_collection.find_one({"chat_id": message.from_user.id})
         await message.answer(f"{text}\nВаш id: {user.get("cms_id")}")
         return
-    await message.answer(f"{text}\nВаш id: {user.get("cms_id")}")
+    elif user is None and args is None:
+        await message.answer(f"Не верный ввод. Вы не ввели ID.")
+        return
+    await message.answer(f"{text}\nВы уже зарегистрированы! Ваш id: {user.get("cms_id")}")
 
 
 async def main() -> None:
