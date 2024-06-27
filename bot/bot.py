@@ -118,9 +118,9 @@ text = """
 
 @dp.message(CommandStart(deep_link=True))
 async def command_start_handler(message: Message, command: CommandObject) -> None:
-    args = command.args
     # payload = decode_payload(args)
     user = user_collection.find_one({"chat_id": message.from_user.id})
+    args = command.args
     if user is None and args:
         # if user_collection.find_one({"chat_id": message.from_user.id}):
         #     await message.answer(f"Вы уже зарегистрированы\nВаш Id: ")
