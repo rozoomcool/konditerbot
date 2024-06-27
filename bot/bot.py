@@ -12,16 +12,19 @@ from aiogram.filters import CommandStart, CommandObject
 from aiogram.types import Message, InputFile, BufferedInputFile, InputMediaPhoto
 from aiogram.utils.payload import decode_payload
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from pymongo import MongoClient
+from pymongo.collection import Collection
+from pymongo.database import Database
 
 MONGO_DETAILS = "mongodb://mongo:27017/bot"
 # MONGO_DETAILS = "mongodb://localhost:27017"
 
-client = pymongo.MongoClient(MONGO_DETAILS)
+client: MongoClient = pymongo.MongoClient(MONGO_DETAILS)
 
-database = client.bot
+database: Database = client.bot
 
-user_collection = database.get_collection("users_collection")
-order_collection = database.get_collection("order_collection")
+user_collection: Collection = database.get_collection("users_collection")
+order_collection: Collection = database.get_collection("order_collection")
 
 TOKEN = "6840739601:AAEM6oMDbD7FqO9LsKdMZzn7tXhSeUQU3Ns"
 # TOKEN = "7105828267:AAGlYANgVAHiUbDg2Zq7t6e2-5_MiEGIYB8"
@@ -118,10 +121,14 @@ async def command_start_handler(message: Message, command: CommandObject) -> Non
     args = command.args
     # payload = decode_payload(args)
     user = user_collection.find_one({"chat_id": message.from_user.id})
-    if user is None:
+    if user is None and args:
+        if user_collection.find_one({"cms_id": args}):
+            await message.answer("Пользователь с таким id удже существует")
+            return
         entity = user_collection.insert_one({"cms_id": args, "chat_id": message.from_user.id})
         user = user_collection.find_one({"chat_id": message.from_user.id})
         await message.answer(f"{text}\nВаш id: {user.get("cms_id")}")
+        return
     await message.answer(f"{text}\nВаш id: {user.get("cms_id")}")
 
 
